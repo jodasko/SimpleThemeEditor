@@ -1,0 +1,69 @@
+@import '~antd/dist/antd.css';
+
+.App {
+  text-align: center;
+}
+
+.title {
+  color: #fff;
+}
+
+.txt-left {
+  text-align: left;
+}
+
+.container {
+  width: 70%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.editor-box {
+  background-color: rgb(215, 227, 227);
+  height: 140px;
+  margin: 0 0 5px 0;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.hidden {
+  display: none;
+}
+
+.ant-btn-link {
+  color: black;
+}
+
+.text-italic {
+  color: rgb(78, 78, 78);
+  font-style: italic;
+}
+
+.text-italic:hover {
+  color: #40a9ff;
+  font-style: italic;
+}
+
+.box-space {
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.error {
+  color: red;
+  font-size: 0.75rem ;
+}
+
+b {
+  text-transform: uppercase;
+}
+
+.toLowerCase {
+  text-transform: lowercase;
+}
+
+.mt-y {
+  margin-top: 1%;
+}
