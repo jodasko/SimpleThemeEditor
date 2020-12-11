@@ -197,10 +197,7 @@ export default function Editor({
       </b>
     );
   } else {
-    // eslint-disable-next-line no-unused-expressions
-    idsection <= 2
-      ? (textVariableReference = <b> {val} </b>)
-      : (textVariableReference = <b> {val} </b>);
+    textVariableReference = <b> {val} </b>;
   }
 
   return (
