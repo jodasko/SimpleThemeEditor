@@ -27,7 +27,7 @@ when A value changes)
 
 ## Constraint
  - This version does not valid if a Reference Name is already set 
- - Border or Font Sizes always accepts two references
+ - Border or Font Sizes always accepts two references ONLY
  - For UX's sake, Radio Buttons was removed as it was not clear its funtionality 
 
 ## Developer:
