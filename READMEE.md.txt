@@ -26,10 +26,10 @@ when A value changes)
 ## Contributing are welcome.
 
 ## Constraint
-This version does not valid if a Reference Name is already set 
-For Border or Font Sizes, always accepts two references
-Only References are accepted for Text Fields and Buttons as it's not specified which one overrules
-
+ - This version does not valid if a Reference Name is already set 
+ - Border or Font Sizes always accepts two references
+ - Only References as input are accepted for Text Fields and Buttons as it's not specified which one overrules (reference <=> value)
+ - For UX's sake, Radio Buttons was removed as it was not clear its funtionality 
 
 ## Developed:
 Carlos Salazar :)
