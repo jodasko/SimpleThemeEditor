@@ -112,10 +112,10 @@ export function ThemeProvider({ children }) {
     }
   }
 
-  // CHANGE VALUE FROM REFERENCE OR ADD A NEW VALUE: PROVIDER TODO
+  // TODO : CHANGE VALUE FROM REFERENCE OR ADD A NEW VALUE: PROVIDER 
   // eslint-disable-next-line no-unused-vars
   function updateEvenAndOdd(id, referenceName, newValue, type) {
-    // for diferents matchs Num + {}, {} #, Num + Num, Num + #
+    // for diferent type of matches Num + {}, {} #, Num + Num, Num + #
   }
 
   function saveToLocalStorage(stateData) {
