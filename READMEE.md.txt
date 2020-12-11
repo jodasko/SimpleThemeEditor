@@ -29,6 +29,8 @@ when A value changes)
  - This version does not valid if a Reference Name is already set 
  - Border or Font Sizes always accepts two references ONLY
  - For UX's sake, Radio Buttons was removed as it was not clear its funtionality 
+ 
+## Changes made with {variable.references} will be shown once Save button is clicked ! 
 
 ## Developer:
 Carlos Salazar :)
