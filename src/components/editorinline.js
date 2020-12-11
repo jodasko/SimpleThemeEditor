@@ -32,9 +32,14 @@ export default function EditorInline() {
           </Panel>
         </Collapse>
       ))}
-      <Button onClick={() => saveToLocalStorage(editor)} type="primary" block>
-        {' '}
-        SAVE{' '}
+      <Button
+        className="save-btn"
+        onClick={() => saveToLocalStorage(editor)}
+        type="primary"
+        block
+      >
+        {" "}
+        SAVE{" "}
       </Button>
     </div>
   );
