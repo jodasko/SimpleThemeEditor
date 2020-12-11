@@ -73,3 +73,7 @@ small{
     color: gray;
     margin-left: 10px;
 }
+
+.save-btn {
+  height: 70px;
+}
