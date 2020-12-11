@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useContext, useState } from 'react';
 import update from 'react-addons-update';
 // Local JSON Data
@@ -6,6 +7,7 @@ import dataJson from './data/data3.json';
 const ThemeContext = React.createContext();
 const ThemeUpdateContext = React.createContext();
 const ThemeUpdateStorageContext = React.createContext();
+const ThemeUpdateEvenAndOdd = React.createContext();
 
 export function useTheme() {
   return useContext(ThemeContext);
@@ -19,16 +21,28 @@ export function useThemeUpdateStorage() {
   return useContext(ThemeUpdateStorageContext);
 }
 
+export function useThemeUpdateEvenAndOdd() {
+  return useContext(ThemeUpdateEvenAndOdd);
+}
+
 // DATA FROM JSON FILE TO LOCALSTORAGE
 localStorage.setItem('editorData', JSON.stringify(dataJson));
 const dataEditorFromJson = JSON.parse(localStorage.getItem('editorData'));
 
 export function ThemeProvider({ children }) {
   // DATA INITIALIZE FROM JSON OR FROM LOCALSTORAGE IF ANY
-  const initialEditor =
-    JSON.parse(window.localStorage.getItem('EditorData')) || dataEditorFromJson;
-
-  const [editor, setEditor] = useState(initialEditor);
+  const [editor, setEditor] = useState(() => {
+    try {
+      const dataStoredEditor =
+        JSON.parse(window.localStorage.getItem('EditorData')) ||
+        dataEditorFromJson;
+      return dataStoredEditor;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return dataEditorFromJson;
+    }
+  });
 
   // EXTRAC REFERENCE FROM CURLY BRACKETS
   const findStringBetween = (str, firstChar, lastChar) => {
@@ -64,7 +78,12 @@ export function ThemeProvider({ children }) {
         .filter((res) => res.id === id)
         .map((re) => re.styles.findIndex((fil) => fil.ref === referenceName));
       const updateItem = update(data[elemIndex], {
-        styles: { [indexItems]: { value: { $set: namevalue } } },
+        styles: {
+          [indexItems]: {
+            value: { $set: namevalue },
+            variableref: { $set: [''] },
+          },
+        },
       });
       const newData = update(data, {
         $splice: [[elemIndex, 1, updateItem]],
@@ -78,7 +97,12 @@ export function ThemeProvider({ children }) {
         .filter((res) => res.id === id)
         .map((re) => re.styles.findIndex((fil) => fil.ref === referenceName));
       const updateItem = update(data[elemIndex], {
-        styles: { [indexItems]: { variableref: { $set: namevalue } } },
+        styles: {
+          [indexItems]: {
+            value: { $set: '' },
+            variableref: { $set: namevalue },
+          },
+        },
       });
       const newData = update(data, {
         $splice: [[elemIndex, 1, updateItem]],
@@ -88,15 +112,24 @@ export function ThemeProvider({ children }) {
     }
   }
 
+  // CHANGE VALUE FROM REFERENCE OR ADD A NEW VALUE: PROVIDER TODO
+  // eslint-disable-next-line no-unused-vars
+  function updateEvenAndOdd(id, referenceName, newValue, type) {
+    // for diferents matchs Num + {}, {} #, Num + Num, Num + #
+  }
+
   function saveToLocalStorage(stateData) {
     window.localStorage.setItem('EditorData', JSON.stringify(stateData));
+    window.location.reload(false);
   }
 
   return (
     <ThemeContext.Provider value={editor}>
       <ThemeUpdateContext.Provider value={changeValueOfReference}>
         <ThemeUpdateStorageContext.Provider value={saveToLocalStorage}>
-          {children}
+          <ThemeUpdateEvenAndOdd.Provider value={updateEvenAndOdd}>
+            {children}
+          </ThemeUpdateEvenAndOdd.Provider>
         </ThemeUpdateStorageContext.Provider>
       </ThemeUpdateContext.Provider>
     </ThemeContext.Provider>

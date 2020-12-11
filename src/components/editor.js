@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Input, Typography } from 'antd';
-import { useTheme, useThemeUpdate } from '../ThemeContext';
+import {
+  useTheme,
+  useThemeUpdate,
+  useThemeUpdateEvenAndOdd,
+} from '../ThemeContext';
 
 // Panel Component
 const { Text } = Typography;
@@ -14,6 +18,7 @@ export default function Editor({
 }) {
   const editor = useTheme();
   const changeValueOfReference = useThemeUpdate();
+  const updateEvenAndOdd = useThemeUpdateEvenAndOdd();
 
   const [styleValue, setStyleValue] = useState(value);
   const [isEditorVisible, setIsEditorVisible] = useState(false);
@@ -40,6 +45,23 @@ export default function Editor({
     setIsEditorVisible((prevState) => !prevState);
   };
 
+  // EXTRAC REFERENCE FROM CURLY BRACKETS
+  const findStringBetween = (str, firstChar, lastChar) => {
+    // EXTRACT STRINGS IN CURLY BRACKETS
+    const reg = new RegExp(`${firstChar}(.*?)${lastChar}`, 'gm');
+    const matchReferences = str.match(reg);
+    // GET RID OF CURLY BRACKETS FOR EACH MATCH AND RETURN ONLY REFERENCES
+    const sendMatches = matchReferences.map((cleanCurly) =>
+      cleanCurly.replace(/[{}]/g, ''),
+    );
+    return sendMatches;
+  };
+
+  const findValueInReference = (str) => {
+    const matches = findStringBetween(str, '{', '}');
+    return matches;
+  };
+
   // UPDATE INPUT
   const updateInput = (e) => {
     setInput(e.target.value);
@@ -56,10 +78,15 @@ export default function Editor({
     );
 
   // CHECK IF INPUTS ARE ALLOWED
-  const isValidated = (id, ref, passInput) => {
+  const isValidated = (id, ref, passInput, type) => {
     setStyleValue(passInput);
     setIsEditorVisible(false);
-    changeValueOfReference(id, ref, passInput);
+
+    if (type === 1 || type === 2 || type === 3) {
+      updateEvenAndOdd(id, ref, passInput, type);
+    } else {
+      changeValueOfReference(id, ref, passInput);
+    }
   };
 
   //= == VALIDATION INPUT SYNTAX ===//
@@ -79,19 +106,26 @@ export default function Editor({
     // FONT SIZE
     const isfontSize = !!ref.includes('fontSize');
 
+    // ONLY COLORS REFRENCES
+    const isReferenceToColors =
+      ref.includes('color') || ref.includes('background');
+
+    // ONLY SIZES REFRENCES
+    // const isReferenceToSize = ref.includes('size');
+
     // CALC EM FIELD
     // const isCalc = !!ref.includes('calc');
 
     // VALIDATE IF IT COMES FROM GENERAL COLORS
     if (id === 1 && validateHexCode && input.length === 7) {
-      isValidated(id, ref, isInput);
+      isValidated(id, ref, isInput, 0);
     } else {
       setShowErrorSintax(true);
     }
 
     // VALIDATE IF IT COMES FROM GLOBAL SIZES
     if (id === 2 && validateInputEmOrPx && !hasHashtag) {
-      isValidated(id, ref, isInput);
+      isValidated(id, ref, isInput, 0);
     } else {
       setShowErrorSintax(true);
     }
@@ -99,6 +133,7 @@ export default function Editor({
     /* VALIDATE IF IT COMES FROM TEXT FIELD OR BUTTONS AND ONLY REFERNCES IS INPUT 
       ALSO CHECK IF CURLY BRACKETS ARE {} AND NOT IF ONE OF THEM IS MISSING { .. , ..}
     */
+
     if ((id === 3 || id === 4) && isVariableReference) {
       const openCurly = isInput.match(/{/g);
       const closeCurly = isInput.match(/}/g);
@@ -112,12 +147,26 @@ export default function Editor({
         !isfontSize &&
         sumCurlies === 2
       ) {
-        isValidated(id, ref, isInput);
+        // ONLY IF REFERENCE VALUE IN {} REFERENCES TO THE SAME TYPE: color to color, size to size
+        if (isReferenceToColors) {
+          const validRef = findValueInReference(isInput).toString();
+          const isToColor = validRef.includes('colors');
+          // eslint-disable-next-line no-unused-expressions
+          isToColor ? isValidated(id, ref, isInput) : setShowErrorSintax(true);
+        } else {
+          const validRef = findValueInReference(isInput).toString();
+          const isToSize = validRef.includes('sizes');
+          // eslint-disable-next-line no-unused-expressions
+          isToSize ? isValidated(id, ref, isInput) : setShowErrorSintax(true);
+        }
       } else {
         setShowErrorSintax(true);
       }
     } else {
-      setShowErrorSintax(true);
+      // eslint-disable-next-line no-unused-expressions
+      validateHexCode || validateInputEmOrPx
+        ? isValidated(id, ref, isInput)
+        : setShowErrorSintax(true);
     }
   };
 
@@ -127,7 +176,7 @@ export default function Editor({
   };
 
   // eslint-disable-next-line prettier/prettier
-  const val = idsection <= 2 ? styleValue : returnValueFromReference(variableRef);
+  const val = styleValue.length === 0 ? returnValueFromReference(variableRef) : styleValue ;
 
   // PRINT OUT THE PROPERTY AND ITS VALUE ACCORDING TO THE TYPE OF TAG
   let textVariableReference;
@@ -136,6 +185,7 @@ export default function Editor({
     textVariableReference = (
       <b>
         {val[0]} <span className="toLowerCase">px solid</span> {val[1]}
+        <small>only works for 2 references :(</small>
       </b>
     );
   } else if (name.toLowerCase() === 'font size (rem)') {
@@ -143,6 +193,7 @@ export default function Editor({
       <b>
         <span className="toLowerCase">calc(</span> {val[0]} * {val[1]}
         <span className="toLowerCase">)</span>
+        <small>only works for 2 references :(</small>
       </b>
     );
   } else {

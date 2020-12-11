@@ -67,3 +67,9 @@ b {
 .mt-y {
   margin-top: 1%;
 }
+
+small{
+  font-size: 8px;
+    color: gray;
+    margin-left: 10px;
+}
