@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Input, Typography } from 'antd';
-import {
-  useTheme,
-  useThemeUpdate,
-  useThemeUpdateEvenAndOdd,
-} from '../ThemeContext';
+import { useTheme, useThemeUpdate } from '../ThemeContext';
 
 // Panel Component
 const { Text } = Typography;
@@ -18,12 +14,14 @@ export default function Editor({
 }) {
   const editor = useTheme();
   const changeValueOfReference = useThemeUpdate();
-  const updateEvenAndOdd = useThemeUpdateEvenAndOdd();
 
   const [styleValue, setStyleValue] = useState(value);
   const [isEditorVisible, setIsEditorVisible] = useState(false);
   const [input, setInput] = useState('');
   const [showErrorSintax, setShowErrorSintax] = useState(false);
+  const [error, setError] = useState(
+    'INVALID CSS SYNTAX OR NOT VALID SYNTAX FOR THIS INPUT',
+  );
 
   useEffect(() => {
     setInput(styleValue);
@@ -78,23 +76,16 @@ export default function Editor({
     );
 
   // CHECK IF INPUTS ARE ALLOWED
-  const isValidated = (id, ref, passInput, type) => {
+  const isValidated = (id, ref, passInput) => {
     setStyleValue(passInput);
     setIsEditorVisible(false);
-
-    if (type === 1 || type === 2 || type === 3) {
-      updateEvenAndOdd(id, ref, passInput, type);
-    } else {
-      changeValueOfReference(id, ref, passInput);
-    }
+    changeValueOfReference(id, ref, passInput);
   };
 
   //= == VALIDATION INPUT SYNTAX ===//
   const validateInput = (ref, id, isInput) => {
-    // eslint-disable-next-line prettier/prettier
-
     const regHexCode = /#([a-fA-F0-9]{3}){1,2}\b/; // only hexadecimal color format
-    const regNumAndDot = /^[0-9]*.?[0-9]*$/; // only number and dot
+    const regNumAndDot = /^[0-9]+([,.][0-9]+)?$/g; // only number and dot
     const validateHexCode = regHexCode.test(isInput);
     const validateInputEmOrPx = regNumAndDot.test(isInput);
     const isVariableReference = isInput.includes('{');
@@ -113,27 +104,66 @@ export default function Editor({
     // ONLY SIZES REFRENCES
     // const isReferenceToSize = ref.includes('size');
 
+    // ONLY SIZES REFRENCES
+    const isReferenceToTextSize = ref.includes('textSize');
+
+    // ONLY FONT REFRENCES
+    const isReferenceToFontSize = ref.includes('fontSize');
+
     // CALC EM FIELD
     // const isCalc = !!ref.includes('calc');
 
     // VALIDATE IF IT COMES FROM GENERAL COLORS
     if (id === 1 && validateHexCode && input.length === 7) {
-      isValidated(id, ref, isInput, 0);
+      isValidated(id, ref, isInput);
     } else {
       setShowErrorSintax(true);
+      setError('NOT A VALID CSS HEXCODE SYNTAX FOR COLOR');
     }
 
     // VALIDATE IF IT COMES FROM GLOBAL SIZES
     if (id === 2 && validateInputEmOrPx && !hasHashtag) {
-      isValidated(id, ref, isInput, 0);
+      isValidated(id, ref, isInput);
     } else {
       setShowErrorSintax(true);
+      setError('NOT A VALID CSS VALUE FOR SIZES');
+    }
+
+    if (id === 3) {
+      if (isReferenceToColors && validateHexCode && input.length === 7) {
+        isValidated(id, ref, isInput);
+      } else {
+        setShowErrorSintax(true);
+        setError('NOT A VALID CSS HEXCODE SYNTAX FOR COLOR');
+      }
+
+      if (isReferenceToTextSize && validateInputEmOrPx && !hasHashtag) {
+        isValidated(id, ref, isInput);
+      } else {
+        setShowErrorSintax(true);
+        setError('NOT A VALID CSS VALUE FOR SIZES ');
+      }
+    }
+
+    if (id === 4) {
+      if (isReferenceToColors && validateHexCode && input.length === 7) {
+        isValidated(id, ref, isInput);
+      } else {
+        setShowErrorSintax(true);
+        setError('NOT A VALID CSS HEXCODE SYNTAX FOR COLOR');
+      }
+
+      if (isReferenceToFontSize && validateInputEmOrPx && !hasHashtag) {
+        isValidated(id, ref, isInput);
+      } else {
+        setShowErrorSintax(true);
+        setError('NOT A VALID CSS VALUE FOR SIZES BUTON');
+      }
     }
 
     /* VALIDATE IF IT COMES FROM TEXT FIELD OR BUTTONS AND ONLY REFERNCES IS INPUT 
       ALSO CHECK IF CURLY BRACKETS ARE {} AND NOT IF ONE OF THEM IS MISSING { .. , ..}
     */
-
     if ((id === 3 || id === 4) && isVariableReference) {
       const openCurly = isInput.match(/{/g);
       const closeCurly = isInput.match(/}/g);
@@ -162,11 +192,6 @@ export default function Editor({
       } else {
         setShowErrorSintax(true);
       }
-    } else {
-      // eslint-disable-next-line no-unused-expressions
-      validateHexCode || validateInputEmOrPx
-        ? isValidated(id, ref, isInput)
-        : setShowErrorSintax(true);
     }
   };
 
@@ -175,8 +200,10 @@ export default function Editor({
     validateInput(ref, id, input);
   };
 
-  // eslint-disable-next-line prettier/prettier
-  const val = styleValue.length === 0 ? returnValueFromReference(variableRef) : styleValue ;
+  const val =
+    styleValue.length === 0
+      ? returnValueFromReference(variableRef)
+      : styleValue;
 
   // PRINT OUT THE PROPERTY AND ITS VALUE ACCORDING TO THE TYPE OF TAG
   let textVariableReference;
@@ -236,9 +263,7 @@ export default function Editor({
             <Row>
               <Col span={10}>
                 <Text className={showErrorSintax ? '' : 'hidden'}>
-                  <span className="error">
-                    INVALID CSS SYNTAX OR NOT VALID SYNTAX FOR THIS INPUT{' '}
-                  </span>
+                  <span className="error">{error}</span>
                 </Text>
               </Col>
               <Col span={12}>
