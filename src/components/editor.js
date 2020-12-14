@@ -252,7 +252,11 @@ export default function Editor({
           <div className="box-space">
             <Input
               addonBefore="Value"
-              placeholder="Use { } to variable references, e.g : {sizes.borderWidth}px solid {colors.primary}"
+              placeholder={
+                idsection <= 2
+                  ? 'Introduce a valid value'
+                  : 'Introduce a valid value or Use { } to variable references, e.g : {sizes.borderWidth}px solid {colors.primary}'
+              }
               value={input}
               onChange={(event) => updateInput(event)}
             />
