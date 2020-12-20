@@ -38,8 +38,8 @@ export default function EditorInline() {
         type="primary"
         block
       >
-        {" "}
-        SAVE{" "}
+        {' '}
+        SAVE{' '}
       </Button>
     </div>
   );
