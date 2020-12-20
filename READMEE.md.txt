@@ -26,8 +26,7 @@ when A value changes)
 ## Contributing are welcome.
 
 ## Constraint
- - This version does not valid if a Reference Name is already set 
- - Border or Font Sizes always accepts two references ONLY
+ - Border or Font Sizes do not display on the editor the vaues set correctly, but after clicking Save Button the correct values are displayed
  - For UX's sake, Radio Buttons was removed as it was not clear its funtionality 
  
 ## Changes made with {variable.references} will be shown once Save button is clicked ! 
