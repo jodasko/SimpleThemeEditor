@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Collapse } from 'antd';
 import { useTheme } from '../ThemeContext';
 import Editor from './editor';
@@ -10,15 +10,15 @@ const { Panel } = Collapse;
 export default function EditorInline() {
   const editor = useTheme();
 
-  useEffect(() => {
-    window.localStorage.setItem('editorData', JSON.stringify(editor));
-  }, [editor]);
+  // useEffect(() => {
+  //   window.localStorage.setItem('editorData', JSON.stringify(editor));
+  // }, [editor]);
 
   return (
     <div>
       {editor.map((resp) => (
         <Collapse>
-          <Panel header={resp.section.toUpperCase()}>
+          <Panel key={resp.id} header={resp.section.toUpperCase()}>
             {resp.styles.map((style) => (
               <Editor
                 idsection={resp.id}
@@ -33,6 +33,7 @@ export default function EditorInline() {
         </Collapse>
       ))}
       <Button
+        id="save-btn-test"
         className="save-btn"
         onClick={() => toSaveToLocalStorage(editor)}
         type="primary"
