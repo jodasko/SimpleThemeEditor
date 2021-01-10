@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { Button, Collapse } from 'antd';
-import { useTheme, useThemeUpdateStorage } from '../ThemeContext';
+import { useTheme } from '../ThemeContext';
 import Editor from './editor';
+import { toSaveToLocalStorage } from '../container/services';
 
 // Panel Component
 const { Panel } = Collapse;
 
 export default function EditorInline() {
   const editor = useTheme();
-  const saveToLocalStorage = useThemeUpdateStorage();
 
   useEffect(() => {
     window.localStorage.setItem('editorData', JSON.stringify(editor));
@@ -34,7 +34,7 @@ export default function EditorInline() {
       ))}
       <Button
         className="save-btn"
-        onClick={() => saveToLocalStorage(editor)}
+        onClick={() => toSaveToLocalStorage(editor)}
         type="primary"
         block
       >
