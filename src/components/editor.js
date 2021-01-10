@@ -174,12 +174,12 @@ export default function Editor({
         const closeCurly = isInput.match(/}/g) || 0;
         const sumCurlies = openCurly.length + closeCurly.length;
         // console.log(isInput.match(/sizes/g).length || 0);
-        // console.log(isInput.match(/sizes/g).length === 1);
+        // console.log(isInput.match(/colors/g).length === 1);
         if ( 
               (regexFor.stringContainNum.test(getFirstChart) && hasHashtag) ||
               (getFirstChart.includes('{') && hasHashtag) ||
               (regexFor.stringContainNum.test(getFirstChart) && isVariableReference) ||
-              sumCurlies === 4
+              (sumCurlies === 4 && isInput != null && isInput.match(/sizes/g).length < 2)
         ) {
           setStyleValue(inputRef.current.input.value);
           isValidated(id, ref, isInput);
