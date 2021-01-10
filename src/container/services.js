@@ -1,12 +1,4 @@
 /**
-  * SAVE TO LOCALSTORAGE
---------------------------------------------------------------------------- */
-export function toSaveToLocalStorage(stateData) {
-  window.localStorage.setItem('EditorData', JSON.stringify(stateData));
-  window.location.reload(false);
-}
-
-/**
  * EXTRACT REFERENCE FROM CURLY BRACKETS
  --------------------------------------------------------------------------- */
 const findStringBetween = (str, firstChar, lastChar) => {
@@ -21,9 +13,27 @@ const findStringBetween = (str, firstChar, lastChar) => {
 };
 
 /**
+  * SAVE TO LOCALSTORAGE
+--------------------------------------------------------------------------- */
+export function toSaveToLocalStorage(stateData) {
+  window.localStorage.setItem('EditorData', JSON.stringify(stateData));
+  window.location.reload(false);
+}
+
+/**
  * FIND VALUE IN REFERENCES
  --------------------------------------------------------------------------- */
 export function toFindValueInReference(str) {
   const matches = findStringBetween(str, '{', '}');
   return matches;
+}
+
+/**
+ * COUNT NUMBERS OF REFERENCES
+ --------------------------------------------------------------------------- */
+export function counterReferences(str) {
+  const openCurly = str.match(/{/g) || 0;
+  const closeCurly = str.match(/}/g) || 0;
+  const sumCurlies = openCurly.length + closeCurly.length;
+  return sumCurlies;
 }

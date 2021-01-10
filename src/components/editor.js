@@ -1,7 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { Row, Col, Button, Input, Typography } from 'antd';
 import { useTheme, useThemeUpdater } from '../ThemeContext';
-import { toFindValueInReference } from '../container/services';
+import {
+  toFindValueInReference,
+  counterReferences,
+} from '../container/services';
 import regexFor from '../container/regularExpressions';
 
 // Panel Component
@@ -17,6 +20,7 @@ export default function Editor({
   const editor = useTheme();
   const updateValues = useThemeUpdater();
   const inputRef = useRef('');
+
   const [styleValue, setStyleValue] = useState(value);
   const [isEditorVisible, setIsEditorVisible] = useState(false);
   const [input, setInput] = useState('');
@@ -34,15 +38,18 @@ export default function Editor({
   // eslint-disable-next-line prefer-spread
   const listReferenceValue = [].concat.apply([], findAllList);
 
-  // SHOW BOX EDITOR
+  /**
+   * SHOW BOX EDITOR
+  --------------------------------------------------------------------------- */
   const toogleEditorBox = () => {
     setIsEditorVisible((prevState) => !prevState);
   };
 
-  // UPDATE INPUT
+  /**
+   * UPDATE INPUT
+  --------------------------------------------------------------------------- */
   const updateInput = (e) => {
     setInput(e.target.value);
-    // setStyleValue(e.target.value);
     setShowErrorSintax(false);
   };
 
@@ -117,13 +124,9 @@ export default function Editor({
 
       // IF IT IS COLOR REFERENCE
       if (isReferenceToColors && isVariableReference && !isReferenceBorder) {
-        const openCurly = isInput.match(/{/g);
-        const closeCurly = isInput.match(/}/g);
-        const sumCurlies = openCurly.length + closeCurly.length;
-        // eslint-disable-next-line prettier/prettier
         const validRef = toFindValueInReference(isInput).toString();
         const isToColor = validRef.includes('colors');
-        if (sumCurlies !== 2 || !isToColor) {
+        if (counterReferences(isInput) !== 2 || !isToColor) {
           setShowErrorSintax(true);
           throw setError(
             'NOT A VALID REFERENCE TO GENERAL COLOR. e.g: colors. ',
@@ -145,13 +148,9 @@ export default function Editor({
 
       // IF IT IS SIZE REFERENCE
       if (isReferenceToTextSize && isVariableReference) {
-        const openCurly = isInput.match(/{/g);
-        const closeCurly = isInput.match(/}/g);
-        const sumCurlies = openCurly.length + closeCurly.length;
-        // eslint-disable-next-line prettier/prettier
         const validRef = toFindValueInReference(isInput).toString();
         const isToSize = validRef.includes('sizes');
-        if (sumCurlies !== 2 || !isToSize) {
+        if (counterReferences(isInput) !== 2 || !isToSize) {
           setShowErrorSintax(true);
           throw setError('NOT A VALID REFERENCE TO GLOBAL SIZES. e.g: sizes. ');
         }
@@ -162,15 +161,14 @@ export default function Editor({
       // IF IT IS BORDER
       if (isReferenceBorder) {
         const getFirstChart = isInput.charAt(0);
-        const openCurly = isInput.match(/{/g) || 0;
-        const closeCurly = isInput.match(/}/g) || 0;
-        const sumCurlies = openCurly.length + closeCurly.length;
         if (
           (regexFor.stringContainNum.test(getFirstChart) && hasHashtag) ||
           (getFirstChart.includes('{') && hasHashtag) ||
           (regexFor.stringContainNum.test(getFirstChart) &&
             isVariableReference) ||
-          sumCurlies === 4
+          (counterReferences(isInput) === 4 &&
+            isInput != null &&
+            isInput.match(/sizes/g).length < 2)
         ) {
           setStyleValue(inputRef.current.input.value);
           isValidated(id, ref, isInput);
@@ -199,13 +197,9 @@ export default function Editor({
 
       // IF IT IS COLOR REFERENCE
       if (isReferenceToColors && isVariableReference) {
-        const openCurly = isInput.match(/{/g) || 0;
-        const closeCurly = isInput.match(/}/g) || 0;
-        const sumCurlies = openCurly.length + closeCurly.length;
-        // eslint-disable-next-line prettier/prettier
         const validRef = toFindValueInReference(isInput).toString();
         const isToColor = validRef.includes('colors');
-        if (sumCurlies !== 2 || !isToColor) {
+        if (counterReferences(isInput) !== 2 || !isToColor) {
           setShowErrorSintax(true);
           throw setError('NOT A VALID REFERENCE TO GENERAL COLOR: colors. ');
         }
@@ -217,7 +211,9 @@ export default function Editor({
       if (isReferenceToFontSize) {
         if (isInput.includes('colors') || hasHashtag) {
           setShowErrorSintax(true);
-          throw setError('NOT A VALID VALUE FOR SIZES PX or EM. e.g: 1 - 2.5');
+          throw setError(
+            'NOT A VALID VALUE: 2 VALUES or TWO REREFENCES REQUIRED FOR SIZES PX or EM. e.g: 1 - 2.5',
+          );
         }
         setStyleValue(inputRef.current.input.value);
         isValidated(id, ref, isInput);
