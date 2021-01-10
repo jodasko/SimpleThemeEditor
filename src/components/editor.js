@@ -1,8 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable prefer-template */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
-import React, { useRef, useState, useEffect} from 'react';
+import React, { useRef, useState } from 'react';
 import { Row, Col, Button, Input, Typography } from 'antd';
 import { useTheme, useThemeUpdater } from '../ThemeContext';
 import { toFindValueInReference } from '../container/services';
@@ -26,11 +22,6 @@ export default function Editor({
   const [input, setInput] = useState('');
   const [showErrorSintax, setShowErrorSintax] = useState(false);
   const [error, setError] = useState('NOT VALID SYNTAX FOR THIS INPUT');
-  
-
-  // useEffect(() => {
-  //   setInput(inputRef.current.value);
-  // }, [styleValue]);
 
   // FILTER AND CREATE AN NEW OBJECT WITH VALUES AND REFERENCES FROM LIST A
   const findAllList = editor
@@ -74,7 +65,7 @@ export default function Editor({
   --------------------------------------------------------------------------- */
   function validateInput(ref, id, isInput) {
     const validateHexCode = regexFor.hexCode.test(isInput);
-    const validateInputEmOrPx = regexFor.numAndDot.test(isInput);
+    const validateInputEmOrPx = regexFor.numInString.test(isInput);
     const isVariableReference = isInput.includes('{');
     const hasHashtag = isInput.includes('#');
 
@@ -148,6 +139,7 @@ export default function Editor({
           setShowErrorSintax(true);
           throw setError('NOT A VALID VALUE FOR SIZES PX or EM. e.g: 1 - 2.5');
         }
+        setStyleValue(inputRef.current.input.value);
         isValidated(id, ref, isInput);
       }
 
@@ -173,13 +165,12 @@ export default function Editor({
         const openCurly = isInput.match(/{/g) || 0;
         const closeCurly = isInput.match(/}/g) || 0;
         const sumCurlies = openCurly.length + closeCurly.length;
-        // console.log(isInput.match(/sizes/g).length || 0);
-        // console.log(isInput.match(/sizes/g).length === 1);
-        if ( 
-              (regexFor.stringContainNum.test(getFirstChart) && hasHashtag) ||
-              (getFirstChart.includes('{') && hasHashtag) ||
-              (regexFor.stringContainNum.test(getFirstChart) && isVariableReference) ||
-              sumCurlies === 4
+        if (
+          (regexFor.stringContainNum.test(getFirstChart) && hasHashtag) ||
+          (getFirstChart.includes('{') && hasHashtag) ||
+          (regexFor.stringContainNum.test(getFirstChart) &&
+            isVariableReference) ||
+          sumCurlies === 4
         ) {
           setStyleValue(inputRef.current.input.value);
           isValidated(id, ref, isInput);
@@ -224,7 +215,7 @@ export default function Editor({
 
       // IF IT IS FONT SIZES
       if (isReferenceToFontSize) {
-        if(isInput.includes("colors") || hasHashtag) {
+        if (isInput.includes('colors') || hasHashtag) {
           setShowErrorSintax(true);
           throw setError('NOT A VALID VALUE FOR SIZES PX or EM. e.g: 1 - 2.5');
         }
@@ -238,11 +229,14 @@ export default function Editor({
     // VALIDATION
     validateInput(ref, id, input);
   };
-  
+
   /**
    * GET VALUES
   --------------------------------------------------------------------------- */
-  const val = styleValue.length === 0 ? returnValueFromReference(variableRef) : styleValue;
+  const val =
+    styleValue.length === 0
+      ? returnValueFromReference(variableRef)
+      : styleValue;
 
   /**
    * PRINT OUT THE PROPERTY AND ITS VALUE ACCORDING TO THE TYPE OF TAG
@@ -251,37 +245,35 @@ export default function Editor({
 
   // CSS BORDER PROPERTY
   if (name.toLowerCase() === 'border') {
-    
-    // COMES FROM EDITOR BOX 
-    if(styleValue.length > 3) {
-      textVariableReference = (
-        <b>
-           {val}
-        </b>
-      );
+    // COMES FROM EDITOR BOX
+    if (styleValue.length > 3) {
+      textVariableReference = <b>{val}</b>;
     }
 
     // COMES FROM DATA
-    if (styleValue.length < 3 && (styleValue.length === 2 || variableRef.length === 2)) {
+    if (
+      styleValue.length < 3 &&
+      (styleValue.length === 2 || variableRef.length === 2)
+    ) {
       textVariableReference = (
         <b>
           {val[0]} <span> px solid </span> {val[1]}
         </b>
       );
     }
-    
+
     // FOR EVEN AND ODD VALUES
-    if (styleValue.length < 3 && (styleValue.length === 1 || variableRef.length === 1)) {
-      
+    if (
+      styleValue.length < 3 &&
+      (styleValue.length === 1 || variableRef.length === 1)
+    ) {
       textVariableReference = (
         <b>
           {/* PX */}
           {variableRef.toString().includes('sizes')
             ? returnValueFromReference(variableRef)
             : ''}
-          {!styleValue.toString().includes('#')
-            ? styleValue
-            : ''}
+          {!styleValue.toString().includes('#') ? styleValue : ''}
           {/* COLOR */}
           {variableRef.toString().includes('colors')
             ? `px solid ${returnValueFromReference(variableRef)}`
@@ -290,33 +282,32 @@ export default function Editor({
         </b>
       );
     }
-    
   } else if (name.toLowerCase() === 'font size (rem)') {
-
-    // COMES FROM EDITOR BOX 
-    if(styleValue.length > 3) {
-      textVariableReference = (
-        <b>
-           {val}
-        </b>
-      );
+    // COMES FROM EDITOR BOX
+    if (styleValue.length > 3) {
+      textVariableReference = <b>{val}</b>;
     }
 
     // COMES FROM DATA
-    if (styleValue.length < 3 && (styleValue.length === 2 || variableRef.length === 2)) {
+    if (
+      styleValue.length < 3 &&
+      (styleValue.length === 2 || variableRef.length === 2)
+    ) {
       textVariableReference = (
         <b>
           CALC( {val[0]} * {val[1]} )
         </b>
       );
-    } 
-    
+    }
+
     // FOR EVEN AND ODD VALUES
-    if (styleValue.length < 3 && (styleValue.length === 1 || variableRef.length === 1)) {
-      
+    if (
+      styleValue.length < 3 &&
+      (styleValue.length === 1 || variableRef.length === 1)
+    ) {
       textVariableReference = (
         <b>
-          CALC( {variableRef ? returnValueFromReference(variableRef) : ''} * {' '}
+          CALC( {variableRef ? returnValueFromReference(variableRef) : ''} *{' '}
           {styleValue || ''} )
         </b>
       );
@@ -360,19 +351,9 @@ export default function Editor({
                   : 'Introduce some valid values or Use { } for variable references separated by a space. E.g : 2 #111DDD || {sizes.borderWidth} {colors.primary}'
               }
               value={input}
-              ref={ inputRef }
+              ref={inputRef}
               onChange={(event) => updateInput(event)}
             />
-            {/* <input 
-              type="text" 
-              ref={inputRef}
-              placeholder={
-                  idsection <= 2
-                    ? 'Introduce a valid value'
-                    : 'Introduce some valid values or Use { } for variable references, e.g : {sizes.borderWidth} , {colors.primary}'
-                }
-              value={input}
-              onChange={(event) => updateInput(event)} /> */}
           </div>
 
           {/* ERROR MESSAGE */}
