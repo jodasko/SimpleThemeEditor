@@ -5,17 +5,17 @@ import {
   toFindValueInReference,
   counterReferences,
 } from '../container/services';
-import regexFor from '../container/regularExpressions';
+import regexFor from '../constants/regularExpressions';
 
 // Panel Component
 const { Text } = Typography;
 
 export default function Editor({
-  idsection,
-  name,
+  sectionId,
+  propertyName,
   value,
-  variableRef,
-  reference,
+  referenceValues,
+  codeReference,
 }) {
   const editor = useTheme();
   const updateValues = useThemeUpdater();
@@ -71,8 +71,8 @@ export default function Editor({
    * VALIDATION HANDLING SYNTAX
   --------------------------------------------------------------------------- */
   function validateInput(ref, id, isInput) {
-    const validateHexCode = regexFor.hexCode.test(isInput);
-    const validateInputEmOrPx = regexFor.numInString.test(isInput);
+    const validateHexCode = regexFor.HEX_CODE.test(isInput);
+    const validateInputEmOrPx = regexFor.NUMBER_IN_STRING.test(isInput);
     const isVariableReference = isInput.includes('{');
     const hasHashtag = isInput.includes('#');
 
@@ -90,9 +90,8 @@ export default function Editor({
     if (id === 1) {
       if (!validateHexCode || isInput.length !== 7) {
         setShowErrorSintax(true);
-        throw setError(
-          'NOT A VALID CSS HEXCODE SYNTAX FOR COLOR: e.g: #010101',
-        );
+        setError('NOT A VALID CSS HEXCODE SYNTAX FOR COLOR: e.g: #010101');
+        return;
       }
       setStyleValue(inputRef.current.input.value);
       isValidated(id, ref, isInput);
@@ -102,7 +101,8 @@ export default function Editor({
     if (id === 2) {
       if (!validateInputEmOrPx || hasHashtag) {
         setShowErrorSintax(true);
-        throw setError('NOT A VALID VALUE FOR SIZES PX or EM: e.g: 1 - 2.5');
+        setError('NOT A VALID VALUE FOR SIZES PX or EM: e.g: 1 - 2.5');
+        return;
       }
       setStyleValue(inputRef.current.input.value);
       isValidated(id, ref, isInput);
@@ -114,9 +114,8 @@ export default function Editor({
       if (isReferenceToColors && !isVariableReference) {
         if (!validateHexCode || isInput.length !== 7) {
           setShowErrorSintax(true);
-          throw setError(
-            'NOT A VALID CSS HEXCODE SYNTAX FOR COLOR: e.g: #010101',
-          );
+          setError('NOT A VALID CSS HEXCODE SYNTAX FOR COLOR: e.g: #010101');
+          return;
         }
         setStyleValue(inputRef.current.input.value);
         isValidated(id, ref, isInput);
@@ -128,9 +127,8 @@ export default function Editor({
         const isToColor = validRef.includes('colors');
         if (counterReferences(isInput) !== 2 || !isToColor) {
           setShowErrorSintax(true);
-          throw setError(
-            'NOT A VALID REFERENCE TO GENERAL COLOR. e.g: colors. ',
-          );
+          setError('NOT A VALID REFERENCE TO GENERAL COLOR. e.g: colors. ');
+          return;
         }
         setStyleValue(inputRef.current.input.value);
         isValidated(id, ref, isInput);
@@ -140,7 +138,8 @@ export default function Editor({
       if (isReferenceToTextSize && !isVariableReference) {
         if (!validateInputEmOrPx || hasHashtag) {
           setShowErrorSintax(true);
-          throw setError('NOT A VALID VALUE FOR SIZES PX or EM. e.g: 1 - 2.5');
+          setError('NOT A VALID VALUE FOR SIZES PX or EM. e.g: 1 - 2.5');
+          return;
         }
         setStyleValue(inputRef.current.input.value);
         isValidated(id, ref, isInput);
@@ -152,7 +151,8 @@ export default function Editor({
         const isToSize = validRef.includes('sizes');
         if (counterReferences(isInput) !== 2 || !isToSize) {
           setShowErrorSintax(true);
-          throw setError('NOT A VALID REFERENCE TO GLOBAL SIZES. e.g: sizes. ');
+          setError('NOT A VALID REFERENCE TO GLOBAL SIZES. e.g: sizes. ');
+          return;
         }
         setStyleValue(inputRef.current.input.value);
         isValidated(id, ref, isInput);
@@ -174,9 +174,10 @@ export default function Editor({
           isValidated(id, ref, isInput);
         } else {
           setShowErrorSintax(true);
-          throw setError(
-            'NOT A VALID VALUE. 2 VALUES REQUIRED, STARTING BY A NUMBER + COLOR CODE OR TWO REFERENCES: e.g. 5 #000000, {size.reference} {color.reference}',
+          setError(
+            'NOT A VALID VALUE. 2 VALUES REQUIRED, STARTING BY A NUMBER + COLOR CODE OR TWO REFERENCES: e.g. 5 #000000, {size.codeReference} {color.codeReference}',
           );
+          return;
         }
       }
     }
@@ -187,9 +188,8 @@ export default function Editor({
       if (isReferenceToColors && !isVariableReference) {
         if (!validateHexCode || isInput.length !== 7) {
           setShowErrorSintax(true);
-          throw setError(
-            'NOT A VALID CSS HEXCODE SYNTAX FOR COLOR: e.g: #010101',
-          );
+          setError('NOT A VALID CSS HEXCODE SYNTAX FOR COLOR: e.g: #010101');
+          return;
         }
         setStyleValue(inputRef.current.input.value);
         isValidated(id, ref, isInput);
@@ -201,7 +201,8 @@ export default function Editor({
         const isToColor = validRef.includes('colors');
         if (counterReferences(isInput) !== 2 || !isToColor) {
           setShowErrorSintax(true);
-          throw setError('NOT A VALID REFERENCE TO GENERAL COLOR: colors. ');
+          setError('NOT A VALID REFERENCE TO GENERAL COLOR: colors. ');
+          return;
         }
         setStyleValue(inputRef.current.input.value);
         isValidated(id, ref, isInput);
@@ -211,9 +212,10 @@ export default function Editor({
       if (isReferenceToFontSize) {
         if (isInput.includes('colors') || hasHashtag) {
           setShowErrorSintax(true);
-          throw setError(
+          setError(
             'NOT A VALID VALUE: 2 VALUES or TWO REREFENCES REQUIRED FOR SIZES PX or EM. e.g: 1 - 2.5',
           );
+          return;
         }
         setStyleValue(inputRef.current.input.value);
         isValidated(id, ref, isInput);
@@ -221,7 +223,7 @@ export default function Editor({
     }
   }
 
-  const addChange = (ref, id) => {
+  const updateEditorProperty = (ref, id) => {
     // VALIDATION
     validateInput(ref, id, input);
   };
@@ -231,7 +233,7 @@ export default function Editor({
   --------------------------------------------------------------------------- */
   const val =
     styleValue.length === 0
-      ? returnValueFromReference(variableRef)
+      ? returnValueFromReference(referenceValues)
       : styleValue;
 
   /**
@@ -240,7 +242,7 @@ export default function Editor({
   let textVariableReference;
 
   // CSS BORDER PROPERTY
-  if (name.toLowerCase() === 'border') {
+  if (propertyName.toLowerCase() === 'border') {
     // COMES FROM EDITOR BOX
     if (styleValue.length > 3) {
       textVariableReference = <b>{val}</b>;
@@ -249,7 +251,7 @@ export default function Editor({
     // COMES FROM DATA
     if (
       styleValue.length < 3 &&
-      (styleValue.length === 2 || variableRef.length === 2)
+      (styleValue.length === 2 || referenceValues.length === 2)
     ) {
       textVariableReference = (
         <b>
@@ -261,24 +263,24 @@ export default function Editor({
     // FOR EVEN AND ODD VALUES
     if (
       styleValue.length < 3 &&
-      (styleValue.length === 1 || variableRef.length === 1)
+      (styleValue.length === 1 || referenceValues.length === 1)
     ) {
       textVariableReference = (
         <b>
           {/* PX */}
-          {variableRef.toString().includes('sizes')
-            ? returnValueFromReference(variableRef)
+          {referenceValues.toString().includes('sizes')
+            ? returnValueFromReference(referenceValues)
             : ''}
           {!styleValue.toString().includes('#') ? styleValue : ''}
           {/* COLOR */}
-          {variableRef.toString().includes('colors')
-            ? `px solid ${returnValueFromReference(variableRef)}`
+          {referenceValues.toString().includes('colors')
+            ? `px solid ${returnValueFromReference(referenceValues)}`
             : ''}
           {styleValue.toString().includes('#') ? `px solid ${styleValue}` : ''}
         </b>
       );
     }
-  } else if (name.toLowerCase() === 'font size (rem)') {
+  } else if (propertyName.toLowerCase() === 'font size (rem)') {
     // COMES FROM EDITOR BOX
     if (styleValue.length > 3) {
       textVariableReference = <b>{val}</b>;
@@ -287,7 +289,7 @@ export default function Editor({
     // COMES FROM DATA
     if (
       styleValue.length < 3 &&
-      (styleValue.length === 2 || variableRef.length === 2)
+      (styleValue.length === 2 || referenceValues.length === 2)
     ) {
       textVariableReference = (
         <b>
@@ -299,11 +301,12 @@ export default function Editor({
     // FOR EVEN AND ODD VALUES
     if (
       styleValue.length < 3 &&
-      (styleValue.length === 1 || variableRef.length === 1)
+      (styleValue.length === 1 || referenceValues.length === 1)
     ) {
       textVariableReference = (
         <b>
-          CALC( {variableRef ? returnValueFromReference(variableRef) : ''} *{' '}
+          CALC({' '}
+          {referenceValues ? returnValueFromReference(referenceValues) : ''} *{' '}
           {styleValue || ''} )
         </b>
       );
@@ -327,10 +330,10 @@ export default function Editor({
         >
           <Row>
             <Col span={16}>
-              {name}: {textVariableReference}
+              {propertyName}: {textVariableReference}
             </Col>
             <Col span={8} className="text-italic">
-              {reference}
+              {codeReference}
             </Col>
           </Row>
         </Button>
@@ -342,7 +345,7 @@ export default function Editor({
               type="text"
               addonBefore="Value"
               placeholder={
-                idsection <= 2
+                sectionId <= 2
                   ? 'Introduce a valid value'
                   : 'Introduce some valid values or Use { } for variable references separated by a space. E.g : 2 #111DDD || {sizes.borderWidth} {colors.primary}'
               }
@@ -372,11 +375,10 @@ export default function Editor({
               <Col>
                 <Button
                   data-testid="set-value-button"
-                  onClick={() => addChange(reference, idsection)}
+                  onClick={() => updateEditorProperty(codeReference, sectionId)}
                   type="primary"
                 >
-                  {' '}
-                  OK
+                  Edit
                 </Button>
               </Col>
             </Row>

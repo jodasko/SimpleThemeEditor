@@ -1,12 +1,17 @@
 import update from 'react-addons-update';
-import regexFor from './regularExpressions';
+import regexFor from '../constants/regularExpressions';
 import { toFindValueInReference } from './services';
 
 /* UPDATE VALUES FROM EDITOR: 
    FOR DIFERENT TYPE OF MATCHES: NUM + {} | {} + # | NUM + NUM | NUM + #
     ---------------------------------------------------------------------------*/
 // eslint-disable-next-line prettier/prettier
-export default function updateEditorValues(promise, id, referenceName, newValue) {
+export default function updateEditorValues(
+  promise,
+  id,
+  referenceName,
+  newValue,
+) {
   // CREATE AN ARRAY TO STORE ALL NEW VALUES
   const data = promise;
   const newValuesArr = [];

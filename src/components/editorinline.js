@@ -21,11 +21,11 @@ export default function EditorInline() {
           <Panel key={resp.id} header={resp.section.toUpperCase()}>
             {resp.styles.map((style) => (
               <Editor
-                idsection={resp.id}
-                name={style.name}
+                idSection={resp.id}
+                propertyName={style.name}
                 value={style.value}
-                variableRef={style.variableref}
-                reference={style.ref}
+                referenceValues={style.variableref}
+                codeReference={style.ref}
                 keyref={0}
               />
             ))}
@@ -39,8 +39,7 @@ export default function EditorInline() {
         type="primary"
         block
       >
-        {' '}
-        SAVE{' '}
+        SAVE
       </Button>
     </div>
   );

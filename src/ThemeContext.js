@@ -27,9 +27,9 @@ export function ThemeProvider({ children }) {
   /**
    * UPDATE EDITOR VALUES
     ---------------------------------------------------------------------------*/
-  function updateValues(id, referenceName, newValue) {
+  const updateValues = (id, referenceName, newValue) => {
     setEditor(updateEditorValues(editor, id, referenceName, newValue));
-  }
+  };
 
   return (
     <ThemeContext.Provider value={editor}>
