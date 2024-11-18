@@ -1,80 +1,42 @@
-@import '~antd/dist/antd.css';
-
-.App {
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
   text-align: center;
 }
 
-.title {
-  color: #fff;
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-.txt-left {
-  text-align: left;
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.container {
-  width: 70%;
-  min-width: 1024px;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
 }
 
-.editor-box {
-  background-color: rgb(215, 227, 227);
-  height: 140px;
-  margin: 0 0 5px 0;
-  padding: 12px;
-  border-radius: 6px;
+.card {
+  padding: 2em;
 }
 
-.hidden {
-  display: none;
-}
-
-.ant-btn-link {
-  color: black;
-}
-
-.text-italic {
-  color: rgb(78, 78, 78);
-  font-style: italic;
-}
-
-.text-italic:hover {
-  color: #40a9ff;
-  font-style: italic;
-}
-
-.box-space {
-  padding-left: 10px;
-  padding-top: 10px;
-}
-
-.error {
-  color: red;
-  font-size: 0.75rem ;
-}
-
-b {
-  text-transform: uppercase;
-}
-
-.toLowerCase {
-  text-transform: lowercase;
-}
-
-.mt-y {
-  margin-top: 1%;
-}
-
-small{
-  font-size: 8px;
-    color: gray;
-    margin-left: 10px;
-}
-
-.save-btn {
-  height: 70px;
+.read-the-docs {
+  color: #888;
 }
