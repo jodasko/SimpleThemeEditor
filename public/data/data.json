@@ -1,0 +1,112 @@
+{
+  "generalColors": [
+    {
+      "label": "Primary font color",
+      "value": "#000000",
+      "type": "color",
+      "key": "colors.primary"
+    },
+    {
+      "label": "Primary background color",
+      "value": "#ffffff",
+      "type": "color",
+      "key": "colors.primaryBackground"
+    },
+    {
+      "label": "Secondary font color",
+      "value": "#ffffff",
+      "type": "color",
+      "key": "colors.secondary"
+    },
+    {
+      "label": "Secondary background color",
+      "value": "#4a86e8",
+      "type": "color",
+      "key": "colors.secondaryBackground"
+    },
+    {
+      "label": "Highlight on primary background",
+      "value": "#4a86e8",
+      "type": "color",
+      "key": "colors.highlight1"
+    },
+    {
+      "label": "Highlight on secondary background",
+      "value": "#ffab40",
+      "type": "color",
+      "key": "colors.highlight2"
+    }
+  ],
+  "globalSizes": [
+    {
+      "label": "Default text size (em)",
+      "value": "1.1",
+      "type": "number",
+      "key": "sizes.text"
+    },
+    {
+      "label": "Header1 text size (em)",
+      "value": "1.4",
+      "type": "number",
+      "key": "sizes.h1"
+    },
+    {
+      "label": "Header2 text size (em)",
+      "value": "1.2",
+      "type": "number",
+      "key": "sizes.h2"
+    },
+    {
+      "label": "Default border width (px)",
+      "value": "1",
+      "type": "number",
+      "key": "sizes.borderWidth"
+    }
+  ],
+  "textField": [
+    {
+      "label": "Text size (em)",
+      "value": "1.1",
+      "type": "number",
+      "key": "textfield.textSize"
+    },
+    {
+      "label": "Font color",
+      "value": "#000000",
+      "type": "color",
+      "key": "textfield.color"
+    },
+    {
+      "label": "Border",
+      "value": "1px solid #000000",
+      "type": "border",
+      "key": "textfield.border"
+    },
+    {
+      "label": "Background",
+      "value": "#ffffff",
+      "type": "color",
+      "key": "textfield.background"
+    }
+  ],
+  "buttons": [
+    {
+      "label": "Font size (rem)",
+      "value": "calc(1.1*1.2)",
+      "type": "size",
+      "key": "buttons.fontSize"
+    },
+    {
+      "label": "Font color",
+      "value": "#000000",
+      "type": "color",
+      "key": "buttons.color"
+    },
+    {
+      "label": "Background",
+      "value": "#4a86e8",
+      "type": "color",
+      "key": "buttons.background"
+    }
+  ]
+}
