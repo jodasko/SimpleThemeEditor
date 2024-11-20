@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { BasePropertyProps } from "../models/Variable.model";
+import { BasePropertyProps } from "../models/BasePropertyProps.model";
 
 interface VariableRowProps extends BasePropertyProps {
   isEditing: boolean;

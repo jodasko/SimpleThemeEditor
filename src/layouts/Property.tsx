@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import VariableDescription from "../components/VariableDescription";
 import InlineEditor from "../components/InlineEditor";
-import { BasePropertyProps } from "../models/Variable.model";
+import { BasePropertyProps } from "../models/BasePropertyProps.model";
 
 interface PropertyProps extends BasePropertyProps {
   // onValueUpdate: (newValue: string) => void;

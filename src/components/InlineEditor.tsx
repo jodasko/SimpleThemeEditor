@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { BasePropertyProps } from "../models/Variable.model";
+import { BasePropertyProps } from "../models/BasePropertyProps.model";
 
 interface VariableRowProps extends BasePropertyProps {
   onSave: () => void;
