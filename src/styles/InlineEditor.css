@@ -1,0 +1,41 @@
+.inline-editor {
+  background-color: #f7f7f7;
+  padding: 12px;
+}
+
+.editor-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.editor-label {
+  font-size: 14px;
+  font-weight: bold;
+  width: 50px;
+}
+
+.editor-input {
+  flex: 1;
+}
+
+.editor-radio-group {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.editor-save-button {
+  padding: 6px 16px;
+}
+
+.editor-close-button {
+  color: gray;
+  padding: 6px;
+}

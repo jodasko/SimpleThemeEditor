@@ -1,0 +1,40 @@
+/* General container styles */
+.theme-editor__container {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 16px;
+  max-width: 800px;
+  width: 90%;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Header */
+.theme-editor__header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Accordion container */
+.accordion__container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Accordion title */
+.accordion__title {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.button__actions {
+  text-align: center;
+}

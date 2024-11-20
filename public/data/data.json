@@ -4,37 +4,37 @@
       "label": "Primary font color",
       "value": "#000000",
       "type": "color",
-      "key": "colors.primary"
+      "keyReference": "colors.primary"
     },
     {
       "label": "Primary background color",
       "value": "#ffffff",
       "type": "color",
-      "key": "colors.primaryBackground"
+      "keyReference": "colors.primaryBackground"
     },
     {
       "label": "Secondary font color",
       "value": "#ffffff",
       "type": "color",
-      "key": "colors.secondary"
+      "keyReference": "colors.secondary"
     },
     {
       "label": "Secondary background color",
       "value": "#4a86e8",
       "type": "color",
-      "key": "colors.secondaryBackground"
+      "keyReference": "colors.secondaryBackground"
     },
     {
       "label": "Highlight on primary background",
       "value": "#4a86e8",
       "type": "color",
-      "key": "colors.highlight1"
+      "keyReference": "colors.highlight1"
     },
     {
       "label": "Highlight on secondary background",
       "value": "#ffab40",
       "type": "color",
-      "key": "colors.highlight2"
+      "keyReference": "colors.highlight2"
     }
   ],
   "globalSizes": [
@@ -42,71 +42,71 @@
       "label": "Default text size (em)",
       "value": "1.1",
       "type": "number",
-      "key": "sizes.text"
+      "keyReference": "sizes.text"
     },
     {
       "label": "Header1 text size (em)",
       "value": "1.4",
       "type": "number",
-      "key": "sizes.h1"
+      "keyReference": "sizes.h1"
     },
     {
       "label": "Header2 text size (em)",
       "value": "1.2",
       "type": "number",
-      "key": "sizes.h2"
+      "keyReference": "sizes.h2"
     },
     {
       "label": "Default border width (px)",
       "value": "1",
       "type": "number",
-      "key": "sizes.borderWidth"
+      "keyReference": "sizes.borderWidth"
     }
   ],
   "textField": [
     {
       "label": "Text size (em)",
       "value": "1.1",
-      "type": "number",
-      "key": "textfield.textSize"
+      "type": "em",
+      "keyReference": "textfield.textSize"
     },
     {
       "label": "Font color",
       "value": "#000000",
       "type": "color",
-      "key": "textfield.color"
+      "keyReference": "textfield.color"
     },
     {
       "label": "Border",
       "value": "1px solid #000000",
       "type": "border",
-      "key": "textfield.border"
+      "keyReference": "textfield.border"
     },
     {
       "label": "Background",
       "value": "#ffffff",
       "type": "color",
-      "key": "textfield.background"
+      "keyReference": "textfield.background"
     }
   ],
   "buttons": [
     {
       "label": "Font size (rem)",
       "value": "calc(1.1*1.2)",
-      "type": "size",
-      "key": "buttons.fontSize"
+      "type": "rem",
+      "keyReference": "buttons.fontSize"
     },
     {
       "label": "Font color",
       "value": "#000000",
       "type": "color",
-      "key": "buttons.color"
+      "keyReference": "buttons.color"
     },
     {
       "label": "Background",
       "value": "#4a86e8",
       "type": "color",
-      "key": "buttons.background"
+      "keyReference": "buttons.background"
     }
   ]
 }
