@@ -9,9 +9,10 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import useThemeData, { ThemeData } from "./../hooks/useThemeData";
+import useThemeData from "./../hooks/useThemeData";
+import { ThemeData } from "../models/BasePropertyProps.model";
 import Property from "./Property";
-import Labels from "../components/Labels";
+import CategoryLabel from "../components/CategoryLabel";
 import Loading from "../components/Loading";
 
 export const ThemeEditor = () => {
@@ -39,11 +40,16 @@ export const ThemeEditor = () => {
               return (
                 <Accordion key={categoryKey} className="accordion__container">
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Labels category={_categoryKey} />
+                    <CategoryLabel category={_categoryKey} />
                   </AccordionSummary>
                   <AccordionDetails>
-                    {themeData[_categoryKey].map((variable, index) => (
-                      <Property key={variable.keyReference} {...variable} />
+                    {themeData[_categoryKey].map((variable) => (
+                      <Property
+                        category={_categoryKey}
+                        key={variable.keyReference}
+                        data={themeData}
+                        {...variable}
+                      />
                     ))}
                   </AccordionDetails>
                 </Accordion>

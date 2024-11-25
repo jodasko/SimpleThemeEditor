@@ -1,16 +1,17 @@
 import { Box, Typography } from "@mui/material";
 import { BasePropertyProps } from "../models/BasePropertyProps.model";
+import { typeFormat, valueFormat } from "../helpers/valueFormats";
 
-interface VariableRowProps extends BasePropertyProps {
+interface VariableDescriptionProps extends BasePropertyProps {
   isEditing: boolean;
   onEdit: () => void;
 }
 
-const VariableDescription: React.FC<VariableRowProps> = ({
+const VariableDescription: React.FC<VariableDescriptionProps> = ({
   label,
   value,
-  type,
   keyReference,
+  type,
   isEditing,
   onEdit,
 }) => {
@@ -20,17 +21,18 @@ const VariableDescription: React.FC<VariableRowProps> = ({
       onClick={onEdit}
     >
       <Box className="variable-value-container">
-        <Typography className="variable-label">{label}:</Typography>
-        {type === "color" ? (
-          <>
-            <Typography className="variable-value-text">{value}</Typography>
-            <Box
-              className="variable-color-preview"
-              style={{ backgroundColor: value }}
-            />
-          </>
-        ) : (
-          <Typography className="variable-value-text">{value}</Typography>
+        <Typography className="variable-label">
+          {label}
+          {typeFormat(label, type)}
+        </Typography>
+        <Typography className="variable-value-text">
+          {valueFormat(label, type, value)}
+        </Typography>
+        {type[0] === "color" && (
+          <Box
+            className="variable-color-preview"
+            style={{ backgroundColor: Array.isArray(value) ? value[0] : value }}
+          ></Box>
         )}
       </Box>
       <Typography className={`variable-key ${isEditing ? "editing" : ""}`}>
