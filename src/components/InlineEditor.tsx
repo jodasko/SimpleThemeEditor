@@ -14,7 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { BasePropertyProps } from "../models/BasePropertyProps.model";
 
 interface VariableRowProps extends BasePropertyProps {
-  onSave: () => void;
+  onSave: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onCancel: () => void;
 }
 
@@ -46,29 +46,36 @@ const InlineEditor: React.FC<VariableRowProps> = ({
           row
           value={selectedType}
           onChange={(e) =>
-            setSelectedType(e.target.value as "text" | "em" | "px" | "color")
+            setSelectedType(
+              e.target.value as "text" | "em" | "px" | "rem" | "color"
+            )
           }
           className="editor-radio-group"
         >
           <FormControlLabel
             value="text"
             control={<Radio size="small" />}
-            label="Text"
+            label="text"
           />
           <FormControlLabel
             value="em"
             control={<Radio size="small" />}
-            label="EM"
+            label="em"
           />
           <FormControlLabel
             value="px"
             control={<Radio size="small" />}
-            label="PX"
+            label="px"
+          />
+          <FormControlLabel
+            value="rem"
+            control={<Radio size="small" />}
+            label="rem"
           />
           <FormControlLabel
             value="color"
             control={<Radio size="small" />}
-            label="Color"
+            label="color"
           />
         </RadioGroup>
       </Box>

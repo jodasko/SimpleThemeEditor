@@ -1,19 +1,6 @@
 import { useEffect, useState } from "react";
+import { ThemeData } from "../models/BasePropertyProps.model";
 import { getData } from "../helpers/getData";
-
-export type ThemeVariable = {
-  label: string;
-  value: string;
-  type: "text" | "em" | "rem" | "px" | "color" | "border";
-  keyReference: string;
-};
-
-export type ThemeData = {
-  generalColors: ThemeVariable[];
-  globalSizes: ThemeVariable[];
-  textField: ThemeVariable[];
-  buttons: ThemeVariable[];
-};
 
 const useThemeData = (): ThemeData | null => {
   const [themeData, setThemeData] = useState<ThemeData | null>(null);
