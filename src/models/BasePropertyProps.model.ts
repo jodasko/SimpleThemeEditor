@@ -1,9 +1,11 @@
+export type valueTypes = "text" | "em" | "rem" | "px" | "color";
+
 export interface BasePropertyProps {
   label: string;
   value: string[];
-  variableReference?: string[];
+  variableReference: string[];
   keyReference: string;
-  type: "text" | "em" | "rem" | "px" | "color";
+  type: valueTypes[];
 }
 
 export type ThemeData = {

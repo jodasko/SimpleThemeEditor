@@ -1,4 +1,4 @@
-import { CategoryTitle } from "../models/category.enum";
+import { CategoryTitle } from "../models/Category.enum";
 
 export const getCategoryTitle = (category: string) => {
   let title: string;

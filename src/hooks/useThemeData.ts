@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { ThemeData } from "../models/BasePropertyProps.model";
 import { getData } from "../helpers/getData";
 
-const useThemeData = (): ThemeData | null => {
-  const [themeData, setThemeData] = useState<ThemeData | null>(null);
+const useThemeData = (): ThemeData | undefined => {
+  const [themeData, setThemeData] = useState<ThemeData>();
 
   const getAllData = async () => {
     const themeData = await getData();
@@ -12,7 +12,7 @@ const useThemeData = (): ThemeData | null => {
 
   useEffect(() => {
     getAllData();
-    getAllData().catch(console.error);
+    // getAllData().catch(console.error);
   }, []);
 
   return themeData;

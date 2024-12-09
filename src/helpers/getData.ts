@@ -4,8 +4,7 @@ export const getData = async () => {
     if (!response.ok) {
       throw new Error(`Failed to fetch data: ${response.statusText}`);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error("Error fetching theme data: ", error);
     return null;

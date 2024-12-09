@@ -1,19 +1,31 @@
+import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import { BasePropertyProps } from "../models/BasePropertyProps.model";
-import { typeFormat, valueFormat } from "../helpers/valueFormats";
+
+import {
+  BasePropertyProps,
+  ThemeData,
+} from "../models/BasePropertyProps.model";
+import { getTypeFormat, getValueFormat } from "../helpers/valueFormats";
+
+import { Category, CategoryProperty } from "../models/Category.enum";
 
 interface VariableDescriptionProps extends BasePropertyProps {
   isEditing: boolean;
   onEdit: () => void;
+  category: string;
+  data: ThemeData;
 }
 
 const VariableDescription: React.FC<VariableDescriptionProps> = ({
   label,
   value,
+  variableReference,
   keyReference,
   type,
   isEditing,
   onEdit,
+  category,
+  data,
 }) => {
   return (
     <Box
@@ -23,10 +35,19 @@ const VariableDescription: React.FC<VariableDescriptionProps> = ({
       <Box className="variable-value-container">
         <Typography className="variable-label">
           {label}
-          {typeFormat(label, type)}
+          {getTypeFormat(label, type)}
         </Typography>
         <Typography className="variable-value-text">
-          {valueFormat(label, type, value)}
+          <b>
+            {getValueFormat(
+              value,
+              variableReference,
+              keyReference,
+              type,
+              data,
+              category
+            )}
+          </b>
         </Typography>
         {type[0] === "color" && (
           <Box

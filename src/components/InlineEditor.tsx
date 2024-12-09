@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -14,9 +14,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import { BasePropertyProps } from "../models/BasePropertyProps.model";
 
 interface VariableRowProps extends BasePropertyProps {
-  onSave: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onUpdate: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onCancel: () => void;
 }
+
+type InputEvent = React.ChangeEvent<HTMLInputElement>;
 
 const InlineEditor: React.FC<VariableRowProps> = ({
   label,
@@ -24,10 +26,19 @@ const InlineEditor: React.FC<VariableRowProps> = ({
   type,
   keyReference,
   onCancel,
-  onSave,
+  onUpdate,
 }) => {
-  const [inputValue, setInputValue] = useState(value);
+  const [inputValue, setInputValue] = useState(value || "");
   const [selectedType, setSelectedType] = useState(type);
+
+  // const handleInputValue = ({ target }: InputEvent) => {
+  //   console.log(target.value);
+  // };
+
+  const handleInputChange = ({ target }: InputEvent) => {
+    setInputValue(target.value);
+    console.log("target", target.value);
+  };
 
   return (
     <Box className="inline-editor">
@@ -35,7 +46,7 @@ const InlineEditor: React.FC<VariableRowProps> = ({
         <Typography className="editor-label">Value:</Typography>
         <TextField
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleInputChange}
           size="small"
           className="editor-input"
         />
@@ -85,7 +96,7 @@ const InlineEditor: React.FC<VariableRowProps> = ({
           color="primary"
           size="small"
           className="editor-save-button"
-          onClick={onSave}
+          onClick={onUpdate}
         >
           OK
         </Button>
