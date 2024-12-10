@@ -7,7 +7,7 @@ import {
   getType,
   getPropertyValues,
   getColorFromReference,
-} from "../helpers/valueFormats";
+} from "../helpers/getValuesByReference";
 import { Category } from "../models/Category.enum";
 
 interface VariableDescriptionProps extends BasePropertyProps {
