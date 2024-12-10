@@ -5,7 +5,7 @@ export interface BasePropertyProps {
   value: string[];
   variableReference: string[];
   keyReference: string;
-  type: valueTypes[];
+  type: string[];
 }
 
 export type ThemeData = {

@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Box, Typography } from "@mui/material";
 
+import { BasePropertyProps } from "../models/BasePropertyProps.model";
+import { useThemeContext } from "../contexts/ThemeContext";
 import {
-  BasePropertyProps,
-  ThemeData,
-} from "../models/BasePropertyProps.model";
-import { getTypeFormat, getValueFormat } from "../helpers/valueFormats";
-
-import { Category, CategoryProperty } from "../models/Category.enum";
+  getType,
+  getPropertyValues,
+  getColorFromReference,
+} from "../helpers/valueFormats";
+import { Category } from "../models/Category.enum";
 
 interface VariableDescriptionProps extends BasePropertyProps {
+  category: string;
   isEditing: boolean;
   onEdit: () => void;
-  category: string;
-  data: ThemeData;
 }
 
 const VariableDescription: React.FC<VariableDescriptionProps> = ({
@@ -22,11 +22,32 @@ const VariableDescription: React.FC<VariableDescriptionProps> = ({
   variableReference,
   keyReference,
   type,
+  category,
   isEditing,
   onEdit,
-  category,
-  data,
 }) => {
+  const {
+    state: { themeData },
+  } = useThemeContext();
+
+  const displayTypeInLabel = useMemo(() => {
+    return getType(label, type);
+  }, [label, type]);
+
+  const displayFormattedValue = useMemo(() => {
+    return (category === Category.generalColors ||
+      category === Category.globalSizes) &&
+      value.length === 1
+      ? value[0]
+      : getPropertyValues(variableReference, keyReference, type, themeData);
+  }, [value, variableReference, keyReference, type, themeData, category]);
+
+  const displayColor = useMemo(() => {
+    return value.length > 0
+      ? value[0]
+      : getColorFromReference(variableReference, themeData);
+  }, [variableReference, themeData]);
+
   return (
     <Box
       className={`variable-row ${isEditing ? "editing" : ""}`}
@@ -35,24 +56,15 @@ const VariableDescription: React.FC<VariableDescriptionProps> = ({
       <Box className="variable-value-container">
         <Typography className="variable-label">
           {label}
-          {getTypeFormat(label, type)}
+          {displayTypeInLabel}
         </Typography>
         <Typography className="variable-value-text">
-          <b>
-            {getValueFormat(
-              value,
-              variableReference,
-              keyReference,
-              type,
-              data,
-              category
-            )}
-          </b>
+          <b>{displayFormattedValue}</b>
         </Typography>
         {type[0] === "color" && (
           <Box
             className="variable-color-preview"
-            style={{ backgroundColor: Array.isArray(value) ? value[0] : value }}
+            style={{ backgroundColor: displayColor }}
           ></Box>
         )}
       </Box>

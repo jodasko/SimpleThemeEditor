@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 const CategoryLabel: React.FC<{ category: string }> = ({ category }) => {
   return (
     <Typography className="accordion-title">
-      {getCategoryTitle(category)}
+      <b>{getCategoryTitle(category)}</b>
     </Typography>
   );
 };

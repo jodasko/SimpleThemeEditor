@@ -8,7 +8,7 @@ import {
 
 interface PropertyProps extends BasePropertyProps {
   category: string;
-  data: ThemeData;
+  // data: ThemeData;
 }
 
 const Property: React.FC<PropertyProps> = ({
@@ -17,20 +17,15 @@ const Property: React.FC<PropertyProps> = ({
   variableReference,
   keyReference,
   type,
-  data,
   category,
 }) => {
   const [editMode, setEditMode] = useState(false);
 
-  const toggleEditMode = () => {
-    setEditMode((prevState) => !prevState);
-  };
+  const toggleEditMode = () => setEditMode((prevState) => !prevState);
+  const handleCancel = () => setEditMode(false);
 
   const handleUpdate = () => {
-    setEditMode(false);
-  };
-
-  const handleCancel = () => {
+    // Next Step: call an action or context dispatch to update the value
     setEditMode(false);
   };
 
@@ -40,10 +35,9 @@ const Property: React.FC<PropertyProps> = ({
         label={label}
         value={value}
         variableReference={variableReference}
-        category={category}
         keyReference={keyReference}
         type={type}
-        data={data}
+        category={category}
         isEditing={editMode}
         onEdit={toggleEditMode}
       />

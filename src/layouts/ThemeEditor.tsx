@@ -1,67 +1,50 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Box,
-  Button,
   Typography,
+  Box,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { ThemeData } from "../models/BasePropertyProps.model";
-import useThemeData from "./../hooks/useThemeData";
+import { useThemeContext } from "../contexts/ThemeContext";
 import CategoryLabel from "../components/CategoryLabel";
 import Loading from "../components/Loading";
 import Property from "./Property";
 
-export const ThemeEditor = () => {
-  const [themeData, setThemeData] = useState<ThemeData>();
-  const fetchThemeData = useThemeData();
+export const ThemeEditor: React.FC = () => {
+  const {
+    state: { themeData, loading, error },
+  } = useThemeContext();
 
-  useEffect(() => {
-    if (fetchThemeData) {
-      setThemeData(fetchThemeData);
-    }
-  }, [fetchThemeData]);
+  if (loading) return <Loading />;
+  if (error) return <Typography>Error: {error}</Typography>;
 
   return (
     <Box className="theme-editor__container">
-      {!themeData ? (
-        <Loading />
-      ) : (
-        <>
-          <Typography className="theme-editor__header">
-            Simple Theme Editor
-          </Typography>
-          {themeData &&
-            Object.keys(themeData).map((categoryKey) => {
-              const _categoryKey = categoryKey as keyof ThemeData;
-
-              return (
-                <Accordion key={categoryKey} className="accordion__container">
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <CategoryLabel category={_categoryKey} />
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    {themeData[_categoryKey].map((variable) => (
-                      <Property
-                        {...variable}
-                        category={_categoryKey}
-                        key={variable.keyReference}
-                        data={themeData}
-                      />
-                    ))}
-                  </AccordionDetails>
-                </Accordion>
-              );
-            })}
-          <div className="button__actions">
-            <Button variant="text">Clean</Button>
-            <Button variant="contained">Save</Button>
-          </div>
-        </>
-      )}
+      <Typography className="theme-editor__header">
+        <b>Simple Theme Editor</b>
+      </Typography>
+      {themeData &&
+        Object.keys(themeData).map((categoryKey) => (
+          <Accordion key={categoryKey}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <CategoryLabel category={categoryKey} />
+            </AccordionSummary>
+            <AccordionDetails>
+              {themeData[categoryKey as keyof typeof themeData].map(
+                (variable) => (
+                  <Property
+                    key={variable.keyReference}
+                    {...variable}
+                    category={categoryKey}
+                  />
+                )
+              )}
+            </AccordionDetails>
+          </Accordion>
+        ))}
     </Box>
   );
 };
