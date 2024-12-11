@@ -3,6 +3,7 @@ import useFetchData from "../hooks/useFetchData";
 import { ThemeData } from "../models/BasePropertyProps.model";
 
 const URL_JSON_DATA = "/data/data.json";
+const LOCAL_STORAGE = "LocalData";
 
 // Define the shape of the context
 interface ThemeContextState {
@@ -32,7 +33,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     data: themeData,
     loading,
     error,
-  } = useFetchData<ThemeData>(URL_JSON_DATA);
+  } = useFetchData<ThemeData>(URL_JSON_DATA, LOCAL_STORAGE);
 
   const state = {
     themeData,
