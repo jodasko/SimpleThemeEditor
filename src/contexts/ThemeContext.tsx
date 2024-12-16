@@ -23,6 +23,10 @@ type ThemeAction =
         newValue: string;
       };
     }
+  | {
+      type: "VALIDATE_AND_UPDATE_REFERENCES";
+      payload: { category: string; newReferences: string[] };
+    }
   | { type: "SAVE_TO_LOCAL_STORAGE" };
 
 interface ThemeContextProps {
@@ -63,6 +67,35 @@ const themeReducer = (
       return state;
     }
 
+    case "VALIDATE_AND_UPDATE_REFERENCES": {
+      const { category, newReferences } = action.payload;
+
+      // Separate into global sizes and general color
+      const globalSize = newReferences.find((ref) => ref.startsWith("sizes."));
+      const generalColor = newReferences.find((ref) =>
+        ref.startsWith("colors.")
+      );
+
+      if (state.themeData) {
+        const updatedCategory = state.themeData[
+          category as keyof ThemeData
+        ].map((property) =>
+          property.keyReference === "textfield.border"
+            ? {
+                ...property,
+                value: [`${globalSize} solid ${generalColor}`], // example value format
+                variableReference: newReferences,
+              }
+            : property
+        );
+
+        return {
+          ...state,
+          themeData: { ...state.themeData, [category]: updatedCategory },
+        };
+      }
+    }
+
     case "SAVE_TO_LOCAL_STORAGE":
       if (state.themeData) {
         localStorage.setItem(LOCAL_STORAGE, JSON.stringify(state.themeData));
@@ -95,18 +128,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       dispatch({ type: "SET_THEME_DATA", payload: themeData });
     }
   }, [themeData]);
-
-  // const {
-  //   data: themeData,
-  //   loading,
-  //   error,
-  // } = useFetchData<ThemeData>(URL_JSON_DATA, LOCAL_STORAGE);
-
-  // const state = {
-  //   themeData,
-  //   loading,
-  //   error,
-  // };
 
   return (
     <ThemeContext.Provider value={{ state, dispatch }}>

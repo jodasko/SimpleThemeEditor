@@ -21,6 +21,41 @@ interface InlineEditorProps extends BasePropertyProps {
 
 type HtmlInputElement = React.ChangeEvent<HTMLInputElement>;
 
+const radioButtonsForTextFieldProperties = (
+  type: string,
+  keyReference: string
+) => {
+  if (keyReference === "textfield.textSize" && type === "color") {
+    return true;
+  }
+
+  if (
+    (keyReference === "textfield.color" ||
+      keyReference === "textfield.background") &&
+    type !== "color" &&
+    type !== "text"
+  ) {
+    return true;
+  }
+};
+
+const radioButtonsForButtonsProperties = (
+  type: string,
+  keyReference: string
+) => {
+  if (keyReference === "buttons.fontSize" && type === "color") {
+    return true;
+  }
+  if (
+    (keyReference === "buttons.color" ||
+      keyReference === "buttons.background") &&
+    type !== "color" &&
+    type !== "text"
+  ) {
+    return true;
+  }
+};
+
 const InlineEditor: React.FC<InlineEditorProps> = ({
   label,
   value,
@@ -42,6 +77,8 @@ const InlineEditor: React.FC<InlineEditorProps> = ({
   };
 
   const handleSave = () => {
+    console.log("save", selectedType);
+
     dispatch({
       type: "UPDATE_PROPERTY",
       payload: {
@@ -51,6 +88,26 @@ const InlineEditor: React.FC<InlineEditorProps> = ({
       },
     });
     onCancel();
+  };
+
+  const isRadioButtonDisabled = (type: string) => {
+    if (keyReference.startsWith("colors.")) {
+      return true;
+    }
+    if (
+      keyReference.startsWith("sizes.") &&
+      (type === "text" || type === "color")
+    ) {
+      return true;
+    }
+
+    if (keyReference.startsWith("textfield.")) {
+      return radioButtonsForTextFieldProperties(type, keyReference);
+    }
+
+    if (keyReference.startsWith("buttons.")) {
+      return radioButtonsForButtonsProperties(type, keyReference);
+    }
   };
 
   return (
@@ -78,6 +135,7 @@ const InlineEditor: React.FC<InlineEditorProps> = ({
               value={option}
               control={<Radio size="small" />}
               label={option}
+              disabled={isRadioButtonDisabled(option)}
             />
           ))}
         </RadioGroup>
