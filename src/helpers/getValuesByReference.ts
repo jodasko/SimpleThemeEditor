@@ -17,7 +17,8 @@ export const getPropertyValues = (
   variableReference: string[],
   keyReference: string,
   types: string[],
-  data: ThemeData | null
+  data: ThemeData | null,
+  value: string[]
 ) => {
   let printOutValue;
 
@@ -46,7 +47,13 @@ export const getPropertyValues = (
   ) {
     printOutValue = setFontSizeValueFormat(variableReference, data);
   } else {
-    printOutValue = resolveSingleReference(variableReference, data);
+    if (value) {
+      console.log(value);
+      printOutValue =
+        value.length > 0
+          ? value[0]
+          : resolveSingleReference(variableReference, data);
+    }
   }
 
   return printOutValue;

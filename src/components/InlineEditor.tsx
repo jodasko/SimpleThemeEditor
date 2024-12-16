@@ -8,33 +8,49 @@ import {
   RadioGroup,
   FormControlLabel,
 } from "@mui/material";
-import { BasePropertyProps } from "../models/BasePropertyProps.model";
+import {
+  BasePropertyProps,
+  ThemeData,
+} from "../models/BasePropertyProps.model";
+import { useThemeContext } from "../contexts/ThemeContext";
 
 interface InlineEditorProps extends BasePropertyProps {
-  onUpdate: (updatedValue: string) => void;
+  category: keyof ThemeData;
   onCancel: () => void;
 }
+
+type HtmlInputElement = React.ChangeEvent<HTMLInputElement>;
 
 const InlineEditor: React.FC<InlineEditorProps> = ({
   label,
   value,
   type,
-  onUpdate,
+  keyReference,
+  category,
   onCancel,
 }) => {
+  const { dispatch } = useThemeContext();
   const [inputValue, setInputValue] = useState(value[0] || "");
   const [selectedType, setSelectedType] = useState(type[0]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: HtmlInputElement) => {
     setInputValue(e.target.value);
   };
 
-  const handleTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTypeChange = (e: HtmlInputElement) => {
     setSelectedType(e.target.value);
   };
 
   const handleSave = () => {
-    onUpdate(inputValue); // Trigger parent update
+    dispatch({
+      type: "UPDATE_PROPERTY",
+      payload: {
+        category,
+        keyReference,
+        newValue: inputValue,
+      },
+    });
+    onCancel();
   };
 
   return (

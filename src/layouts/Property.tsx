@@ -7,8 +7,7 @@ import {
 } from "../models/BasePropertyProps.model";
 
 interface PropertyProps extends BasePropertyProps {
-  category: string;
-  // data: ThemeData;
+  category: keyof ThemeData;
 }
 
 const Property: React.FC<PropertyProps> = ({
@@ -24,10 +23,10 @@ const Property: React.FC<PropertyProps> = ({
   const toggleEditMode = () => setEditMode((prevState) => !prevState);
   const handleCancel = () => setEditMode(false);
 
-  const handleUpdate = () => {
-    // Next Step: call an action or context dispatch to update the value
-    setEditMode(false);
-  };
+  // const handleUpdate = () => {
+  //   // Next Step: call an action or context dispatch to update the value
+  //   setEditMode(false);
+  // };
 
   return (
     <>
@@ -46,9 +45,9 @@ const Property: React.FC<PropertyProps> = ({
           label={label}
           value={value}
           type={type}
+          category={category}
           keyReference={keyReference}
           variableReference={variableReference}
-          onUpdate={handleUpdate}
           onCancel={handleCancel}
         />
       )}

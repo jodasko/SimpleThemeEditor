@@ -39,7 +39,13 @@ const VariableDescription: React.FC<VariableDescriptionProps> = ({
       category === Category.globalSizes) &&
       value.length === 1
       ? value[0]
-      : getPropertyValues(variableReference, keyReference, type, themeData);
+      : getPropertyValues(
+          variableReference,
+          keyReference,
+          type,
+          themeData,
+          value
+        );
   }, [value, variableReference, keyReference, type, themeData, category]);
 
   const displayColor = useMemo(() => {

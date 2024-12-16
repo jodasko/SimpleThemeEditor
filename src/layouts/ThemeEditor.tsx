@@ -5,18 +5,24 @@ import {
   AccordionDetails,
   Typography,
   Box,
+  Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+import { ThemeData } from "../models/BasePropertyProps.model";
 import { useThemeContext } from "../contexts/ThemeContext";
 import CategoryLabel from "../components/CategoryLabel";
 import Loading from "../components/Loading";
 import Property from "./Property";
 
 export const ThemeEditor: React.FC = () => {
-  const {
-    state: { themeData, loading, error },
-  } = useThemeContext();
+  const { state, dispatch } = useThemeContext();
+  const { themeData, loading, error } = state;
+
+  const handleSave = () => {
+    dispatch({ type: "SAVE_TO_LOCAL_STORAGE" });
+    alert("Changes saved to localStorage!");
+  };
 
   if (loading) return <Loading />;
   if (error) return <Typography>Error: {error}</Typography>;
@@ -38,13 +44,20 @@ export const ThemeEditor: React.FC = () => {
                   <Property
                     key={variable.keyReference}
                     {...variable}
-                    category={categoryKey}
+                    category={categoryKey as keyof ThemeData}
                   />
                 )
               )}
             </AccordionDetails>
           </Accordion>
         ))}
+
+      <Box className="button-actions">
+        <Button variant="text">Clean</Button>
+        <Button variant="contained" onClick={handleSave}>
+          Save
+        </Button>
+      </Box>
     </Box>
   );
 };
