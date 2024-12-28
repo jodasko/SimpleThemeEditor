@@ -1,5 +1,5 @@
 import { useState } from "react";
-import VariableDescription from "../components/VariableDescription";
+import VariableDescription from "../components/PropertyDetails";
 import InlineEditor from "../components/InlineEditor";
 import {
   BasePropertyProps,

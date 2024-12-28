@@ -9,14 +9,15 @@ import {
   getColorFromReference,
 } from "../helpers/getValuesByReference";
 import { Category } from "../models/Category.enum";
+import { isTypeForTextReference } from "../helpers/getFormat";
 
-interface VariableDescriptionProps extends BasePropertyProps {
+interface PropertyDetailsProps extends BasePropertyProps {
   category: string;
   isEditing: boolean;
   onEdit: () => void;
 }
 
-const VariableDescription: React.FC<VariableDescriptionProps> = ({
+const PropertyDetails: React.FC<PropertyDetailsProps> = ({
   label,
   value,
   variableReference,
@@ -30,14 +31,15 @@ const VariableDescription: React.FC<VariableDescriptionProps> = ({
     state: { themeData },
   } = useThemeContext();
 
-  const displayTypeInLabel = useMemo(() => {
-    return getType(label, type);
-  }, [label, type]);
+  const displayType = useMemo(() => {
+    return !isTypeForTextReference(keyReference)
+      ? null
+      : getType(variableReference, type, themeData);
+  }, [variableReference, type, themeData]);
 
-  const displayFormattedValue = useMemo(() => {
-    return (category === Category.generalColors ||
-      category === Category.globalSizes) &&
-      value.length === 1
+  const displayValue = useMemo(() => {
+    return category === Category.generalColors ||
+      category === Category.globalSizes
       ? value[0]
       : getPropertyValues(
           variableReference,
@@ -62,10 +64,10 @@ const VariableDescription: React.FC<VariableDescriptionProps> = ({
       <Box className="variable-value-container">
         <Typography className="variable-label">
           {label}
-          {displayTypeInLabel}
+          {displayType}
         </Typography>
         <Typography className="variable-value-text">
-          <b>{displayFormattedValue}</b>
+          <b>{displayValue}</b>
         </Typography>
         {type[0] === "color" && (
           <Box
@@ -81,4 +83,4 @@ const VariableDescription: React.FC<VariableDescriptionProps> = ({
   );
 };
 
-export default VariableDescription;
+export default PropertyDetails;

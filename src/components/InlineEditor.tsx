@@ -57,7 +57,6 @@ const radioButtonsForButtonsProperties = (
 };
 
 const InlineEditor: React.FC<InlineEditorProps> = ({
-  label,
   value,
   type,
   keyReference,
@@ -85,6 +84,7 @@ const InlineEditor: React.FC<InlineEditorProps> = ({
         category,
         keyReference,
         newValue: inputValue,
+        newType: selectedType,
       },
     });
     onCancel();

@@ -21,6 +21,7 @@ type ThemeAction =
         category: keyof ThemeData;
         keyReference: string;
         newValue: string;
+        newType: string;
       };
     }
   | {
@@ -49,13 +50,13 @@ const themeReducer = (
       return { ...state, themeData: action.payload, loading: false };
 
     case "UPDATE_PROPERTY": {
-      const { category, keyReference, newValue } = action.payload;
+      const { category, keyReference, newValue, newType } = action.payload;
 
       // Update the specific property in the themeData
       if (state.themeData) {
         const updatedCategory = state.themeData[category].map((property) =>
           property.keyReference === keyReference
-            ? { ...property, value: [newValue] }
+            ? { ...property, value: [newValue], type: [newType] }
             : property
         );
 

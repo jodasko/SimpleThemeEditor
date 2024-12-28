@@ -1,7 +1,7 @@
 export type valueTypes = "text" | "em" | "rem" | "px" | "color";
 
 export interface BasePropertyProps {
-  label: string;
+  label?: string;
   value: string[];
   variableReference: string[];
   keyReference: string;

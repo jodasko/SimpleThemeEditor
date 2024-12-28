@@ -3,16 +3,32 @@ import {
   Category,
   VariableReferenceWithMultipleValues,
 } from "../models/Category.enum";
+import { borderCssFormat } from "./getFormat";
+import {
+  retrieveTypeFromGlobalSizesTypeReference,
+  retrieveValueFromGeneralColorsReference,
+  retrieveValueFromGlobalSizesTypeReference,
+} from "./resolveReferences";
 
-const UNIT_CSS_WIDTH_TYPE = ["em", "rem", "px"];
-
-export const getType = (label: string, type: string[]) => {
-  return label === VariableReferenceWithMultipleValues.textfieldBorder ||
-    type[0] === "color"
-    ? ":"
-    : ` (${type[0]}): `;
+export const getType = (
+  variableReference: string[],
+  types: string[],
+  data: ThemeData | null
+) => {
+  let type;
+  if (types.length === 0) {
+    type = retrieveTypeFromGlobalSizesTypeReference(variableReference, data);
+  } else {
+    type = types[0];
+  }
+  return type === "color" ? ":" : ` (${type}): `;
 };
 
+/**
+ * Getting properties values from KeyReferences
+ * Both 'Border' and 'Font size' have two values, be by variableRefences or by values or mix
+ * Other Properties have single values
+ */
 export const getPropertyValues = (
   variableReference: string[],
   keyReference: string,
@@ -20,35 +36,45 @@ export const getPropertyValues = (
   data: ThemeData | null,
   value: string[]
 ) => {
+  const isEdited = (types.length > 0 && value.length > 0) || false;
   let printOutValue;
+  let borderWidth;
+  let color;
+  let type;
 
-  /**
-   * Handle Properties
-   * 'Border' and 'Font size' have two values, be both by variableRefences or by values or mix
-   * Other Properties are single values
-   */
-  if (keyReference === VariableReferenceWithMultipleValues.textfieldBorder) {
-    const unitAt = types.findIndex((t) => UNIT_CSS_WIDTH_TYPE.includes(t));
-    const borderWidth =
-      unitAt >= 0
-        ? filterUnitValue(variableReference, data, unitAt, Category.globalSizes)
-        : "";
-    const color =
-      filterUnitValue(
-        variableReference,
-        data,
-        types.indexOf("color"),
-        Category.generalColors
-      ) || "";
-
-    printOutValue = setBorderValueFormat(types, borderWidth, unitAt, color);
-  } else if (
-    keyReference === VariableReferenceWithMultipleValues.buttonsFontSize
-  ) {
-    printOutValue = setFontSizeValueFormat(variableReference, data);
+  if (isEdited) {
+    // If the value is edited, return the value
   } else {
-    if (value) {
-      console.log(value);
+    // Building the value for the 'Border' property
+    if (keyReference === VariableReferenceWithMultipleValues.textfieldBorder) {
+      type = retrieveTypeFromGlobalSizesTypeReference(variableReference, data);
+      variableReference.forEach((reference) => {
+        if (reference.includes("sizes.")) {
+          borderWidth = retrieveValueFromGlobalSizesTypeReference(
+            reference,
+            data
+          );
+        }
+        if (reference.includes("colors.")) {
+          color = retrieveValueFromGeneralColorsReference(reference, data);
+        }
+      });
+
+      if (borderWidth && type && color) {
+        printOutValue = borderCssFormat(borderWidth, type, color);
+      } else {
+        console.error("One or more values are undefined:", {
+          borderWidth,
+          type,
+          color,
+        });
+      }
+    } else if (
+      keyReference === VariableReferenceWithMultipleValues.buttonsFontSize
+    ) {
+      // Building the value for the 'Font size' property
+      printOutValue = setFontSizeValueFormat(variableReference, data);
+    } else {
       printOutValue =
         value.length > 0
           ? value[0]
@@ -77,19 +103,6 @@ export const getColorFromReference = (
     }
   });
   return resolvedSingleReference;
-};
-
-const filterUnitValue = (
-  variableReference: string[],
-  data: any,
-  unitIndex: number,
-  category: string
-) => {
-  return data[category]
-    .filter(
-      (property: any) => property.keyReference === variableReference[unitIndex]
-    )
-    .map((property: any) => property.value[0])[0]; // Return the first value
 };
 
 const resolveMultipleReferences = (
@@ -124,15 +137,6 @@ const resolveSingleReference = (
     }
   });
   return resolvedSingleReference;
-};
-
-const setBorderValueFormat = (
-  types: any,
-  borderWidth: string,
-  unitAt: number,
-  color: string
-) => {
-  return `${borderWidth}${types[unitAt]} solid ${color}`;
 };
 
 const setFontSizeValueFormat = (variableReference: string[], data: any) => {

@@ -79,28 +79,28 @@
       "value": [],
       "variableReference": ["sizes.text"],
       "keyReference": "textfield.textSize",
-      "type": ["em"]
+      "type": []
     },
     {
       "label": "Font color",
       "value": [],
       "variableReference": ["colors.primary"],
       "keyReference": "textfield.color",
-      "type": ["color"]
+      "type": []
     },
     {
       "label": "Border",
       "value": [],
       "variableReference": ["sizes.borderWidth", "colors.primary"],
       "keyReference": "textfield.border",
-      "type": ["px", "color"]
+      "type": []
     },
     {
       "label": "Background",
       "value": [],
       "variableReference": ["colors.primaryBackground"],
       "keyReference": "textfield.background",
-      "type": ["color"]
+      "type": []
     }
   ],
   "buttons": [
@@ -109,21 +109,21 @@
       "value": [],
       "variableReference": ["sizes.text", "sizes.h2"],
       "keyReference": "buttons.fontSize",
-      "type": ["rem"]
+      "type": []
     },
     {
       "label": "Font color",
       "value": [],
       "variableReference": ["colors.primary"],
       "keyReference": "buttons.color",
-      "type": ["color"]
+      "type": []
     },
     {
       "label": "Background",
       "value": [],
       "variableReference": ["colors.primaryBackground"],
       "keyReference": "buttons.background",
-      "type": ["color"]
+      "type": []
     }
   ]
 }
